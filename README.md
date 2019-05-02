@@ -4,6 +4,8 @@ Javascript image player.
 
 An alternative to animated GIFs.
 
+There are probably better ways of doing this ...
+
 Existing GIF files can be exploded with ImageMagick, e.g.:
 
 ```bash
@@ -37,14 +39,20 @@ Create a new image player, specifying the ID of the HTML element (probably a `<d
 ip = new ImagePlayer({
   element: 'ipDiv',
   images: [
-    'images/00/file00.jpg',
-    'images/00/file01.jpg',
-    'images/00/file02.jpg',
-    'images/00/file03.jpg'
+    'example/file000.jpg',
+    'example/file001.jpg',
+    'example/file002.jpg',
+    'example/file003.jpg',
+    'example/file004.jpg',
+    'example/file005.jpg',
+    'example/file006.jpg',
+    'example/file007.jpg',
+    'example/file008.jpg',
+    'example/file009.jpg'
   ],
   autoplay: 0,
   interval: 250,
-  icondir:  'images/controls'
+  icondir:  'images'
 });
 ```
 
@@ -69,4 +77,4 @@ Optional options:
 
 ### Example
 
-
+  * [https://cemacrr.github.io/imageplayer/](https://cemacrr.github.io/imageplayer/)
