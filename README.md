@@ -28,7 +28,7 @@ Include the Javascript in the web page, e.g.:
 Minified version:
 
 ```html
-<script src="js/imageplayer.min.js"></script>
+<script src="imageplayer.min.js"></script>
 ```
 
 Create a new image player, specifying the ID of the HTML element (probably a `<div>`) in which the player can be inserted, and the images to use, e.g.:
