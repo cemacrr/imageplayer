@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ImagePLayer</title>
+    <meta charset='utf-8' />
+    <script src='imageplayer.min.js'></script>
+  </head>
+  <body>
+    <div id='ipDiv'></div>
+    <script>
+      ip = new ImagePlayer({
+        element: 'ipDiv',
+        images: [
+          'example/file000.jpg',
+          'example/file001.jpg',
+          'example/file002.jpg',
+          'example/file003.jpg',
+          'example/file004.jpg',
+          'example/file005.jpg',
+          'example/file006.jpg',
+          'example/file007.jpg',
+          'example/file008.jpg',
+          'example/file009.jpg'
+        ],
+        autoplay: 0,
+        interval: 250,
+        icondir:  'images'
+      });
+    </script>
+  </body>
+</html>
