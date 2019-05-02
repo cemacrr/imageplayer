@@ -51,7 +51,7 @@ ip = new ImagePlayer({
     'example/file009.jpg'
   ],
   autoplay: 0,
-  interval: 250,
+  interval: 150,
   icondir:  'images'
 });
 ```
