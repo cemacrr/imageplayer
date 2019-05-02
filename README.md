@@ -1,0 +1,4 @@
+## ImagePlayer
+
+Javascript image player.
+
