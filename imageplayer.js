@@ -9,7 +9,6 @@ var ImagePlayer = function({
                     autoplay     = 1,
                     controls     = 1,
                     bgcolor      = '#383838',
-                    color        = '#ffffff',
                     closebgcolor = 'rgba(56, 56, 56, 0.5)',
                     closecolor   = '#ffffff',
                     icondir      = 'images'
@@ -38,7 +37,6 @@ var ImagePlayer = function({
   this._fullscreen       = false;
   /* background color for full screen / controls : */
   this.bgcolor           = bgcolor;
-  this.color             = color;
   this.closebgcolor      = closebgcolor;
   this.closecolor        = closecolor;
   /* full screen close element: */
