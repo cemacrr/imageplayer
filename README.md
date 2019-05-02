@@ -46,6 +46,7 @@ ip = new ImagePlayer({
   interval: 250,
   icondir:  'images/controls'
 });
+```
 
 #### Options
 
