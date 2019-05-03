@@ -9,9 +9,9 @@ There are probably better ways of doing this ...
 Existing GIF files can be exploded with ImageMagick, e.g.:
 
 ```bash
-$ convert 00.gif -coalesce file%03d.jpg
+$ convert file.gif -coalesce file%03d.jpg
 $ ls -1
-00.gif
+file.gif
 file000.jpg
 file001.jpg
 file002.jpg
