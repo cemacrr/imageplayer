@@ -1,18 +1,18 @@
 /* ImagePlayer: */
-var ImagePlayer = function({
-                    /* default values: */
-                    element      = null,
-                    images       = [],
-                    width        = '',
-                    height       = '',
-                    interval     = 300,
-                    autoplay     = 1,
-                    controls     = 1,
-                    bgcolor      = '#383838',
-                    closebgcolor = 'rgba(56, 56, 56, 0.5)',
-                    closecolor   = '#ffffff',
-                    icondir      = 'images'
-                  }) {
+var ImagePlayer = function(args) {
+
+  /* get arguments: */
+  var element      = (typeof args.element === 'undefined') ? null : args.element;
+  var images       = (typeof args.images === 'undefined') ? [] : args.images;
+  var width        = (typeof args.width === 'undefined') ? '' : args.width;
+  var height       = (typeof args.height === 'undefined') ? '' : args.height;
+  var interval     = (typeof args.interval === 'undefined') ? 300 : args.interval;
+  var autoplay     = (typeof args.autoplay === 'undefined') ? 1 : args.autoplay;
+  var controls     = (typeof args.control === 'undefined') ? 1 : args.controls;
+  var bgcolor      = (typeof args.bgcolor === 'undefined') ? '#383838' : args.bgcolor;
+  var closebgcolor = (typeof args.closebgcolor === 'undefined') ? 'rgba(56, 56, 56, 0.5)' : args.closebgcolor;
+  var closecolor   = (typeof args.closecolor === 'undefined') ? '#ffffff' : args.closecolor;
+  var icondir      = (typeof args.icondir === 'undefined') ? 'images' : args.icondir;
 
   /* get reference to self: */
   var _self = this;
@@ -119,9 +119,9 @@ var ImagePlayer = function({
   /* function to (pre) fetch images: */
   this._fetchImages = function(obj, imgs) {
     /* pre-fetch new next and previous image: */
-    for (let i of imgs) {
+    for (var i = 0; i < imgs.length; i++) {
       /* if not previously fetched: */
-      if (! obj._fetched.includes(i)) {
+      if (obj._fetched.indexOf(i) == -1) {
         /* use XMLHttpRequest to grab images: */
         var _xhr = new XMLHttpRequest();
         _xhr.open('GET', obj.images[i], true);
