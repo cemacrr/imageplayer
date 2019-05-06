@@ -67,6 +67,7 @@ Optional options:
 
   * `width`: The width, in pixels, to set for the `<div>` containing the player.
   * `height`: The height, in pixels, to set for the `<div>` containing the player.
+  * `align`: Alignment within the `<div>`. Options: `left`, `right`, `center`. Default: `center`.
   * `interval`: The interval in milliseconds between updating images. Default: `300`.
   * `autoplay`: Whether to start playing automatically. Set to `1` for true, `0` for false. Default: `1`.
   * `controls`: Whether controls should be displayed. Set to `1` for true, `0` for false. Default: `1`.
