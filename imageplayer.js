@@ -4,6 +4,7 @@ var ImagePlayer = function(args) {
   /* get arguments: */
   var element      = (typeof args.element === 'undefined') ? null : args.element;
   var images       = (typeof args.images === 'undefined') ? [] : args.images;
+  var align        = (typeof args.align === 'undefined') ? 'center' : args.align;
   var width        = (typeof args.width === 'undefined') ? '' : args.width;
   var height       = (typeof args.height === 'undefined') ? '' : args.height;
   var interval     = (typeof args.interval === 'undefined') ? 300 : args.interval;
@@ -37,6 +38,8 @@ var ImagePlayer = function(args) {
   this._paddingleft      = this.element.style.paddingLeft || null;
   this._paddingright     = this.element.style.paddingRight || null;
   this._fullscreen       = false;
+  /* alignment: */
+  this._align            = align;
   /* background color for full screen / controls : */
   this.bgcolor           = bgcolor;
   this.closebgcolor      = closebgcolor;
@@ -315,6 +318,21 @@ var ImagePlayer = function(args) {
       obj._img.style.objectFit          = obj._imgobjectfit;
       obj._img.style.paddingTop         = obj._imgpaddingtop;
       obj._img.style.paddingBottom      = obj._imgpaddingbottom;
+      if (obj._align == 'left') {
+        obj._img.style.margin      = '';
+        obj._img.style.marginRight = 'auto';
+        if (obj.controls == 1) {
+          obj._controls.style.margin      = '';
+          obj._controls.style.marginRight = 'auto';
+        }
+      } else if (obj._align == 'right') {
+        obj._img.style.margin      = '';
+        obj._img.style.marginLeft = 'auto';
+        if (obj.controls == 1) {
+          obj._controls.style.margin     = '';
+          obj._controls.style.marginLeft = 'auto';
+        }
+      }
       obj._fullscreen                   = false;
       obj.toggleFullScreenClose();
     } else {
@@ -341,6 +359,10 @@ var ImagePlayer = function(args) {
       obj._img.style.height             = '90%';
       obj._img.style.width              = '90%';
       obj._img.style.objectFit          = 'contain';
+      obj._img.style.margin             = 'auto';
+      if (obj.controls == 1) {
+        obj._controls.style.margin = 'auto';
+      }
       obj._fullscreen                   = true;
       obj.toggleFullScreenClose();
     }
@@ -398,8 +420,14 @@ var ImagePlayer = function(args) {
     controlsDiv.style.maxWidth        = '100%';
     controlsDiv.style.height          = obj._controlsheight + 'px';
     controlsDiv.style.backgroundColor = obj.bgcolor;
-    controlsDiv.style.margin          = 'auto';
     controlsDiv.style.overflow        = 'hidden';
+    if (obj._align == 'left') {
+      controlsDiv.style.marginRight = 'auto';
+    } else if (obj._align == 'right') {
+      controlsDiv.style.marginLeft = 'auto';
+    } else {
+      controlsDiv.style.margin = 'auto';
+    }
     /* play / pause button: */
     obj._controlsplay = obj.addControl(obj._iconplay, obj.play);
     /* full screen button: */
@@ -427,8 +455,14 @@ var ImagePlayer = function(args) {
     /* set style: */
     obj._img.style.maxWidth  = '100%';
     obj._img.style.maxHeight = '100%';
-    obj._img.style.margin    = 'auto';
     obj._img.style.display   = 'block';
+    if (obj._align == 'left') {
+      obj._img.style.marginRight = 'auto';
+    } else if (obj._align == 'right') {
+      obj._img.style.marginLeft = 'auto';
+    } else {
+      obj._img.style.margin = 'auto';
+    }
     /* set indexes: */
     obj.setIndexes(0);
     /* set image: */
