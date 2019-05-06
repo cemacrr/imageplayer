@@ -516,6 +516,8 @@ var ImagePlayer = function(args) {
       if (obj.controls == 1) {
         /* set controls width: */
         obj.setControlsWidth();
+        /* add resize listener: */
+        window.addEventListener('resize', obj.setControlsWidth);
       }
       /* clear onload: */
       obj._img.onload = null;
