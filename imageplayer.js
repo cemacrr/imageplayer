@@ -21,22 +21,9 @@ var ImagePlayer = function(args) {
   /* html div element to use: */
   this.element           = document.getElementById(element);
   /* style of div element: */
-  this._position         = this.element.style.position || null;
+  this._style            = {};
   this._width            = this.element.style.width || width;
   this._height           = this.element.style.height || height;
-  this._maxwidth         = this.element.style.maxWidth || null;
-  this._maxheight        = this.element.style.maxHeight || null;
-  this._zIndex           = this.element.style.zIndex || null;
-  this._top              = this.element.style.top || null;
-  this._left             = this.element.style.left || null;
-  this._backgroundcolor  = this.element.style.backgroundColor || null;
-  this._border           = this.element.style.border || null;
-  this._margin           = this.element.style.margin || null;
-  this._padding          = this.element.style.padding || null;
-  this._paddingtop       = this.element.style.paddingTop || null;
-  this._paddingbottom    = this.element.style.paddingBottom || null;
-  this._paddingleft      = this.element.style.paddingLeft || null;
-  this._paddingright     = this.element.style.paddingRight || null;
   this._fullscreen       = false;
   /* alignment: */
   this._align            = align;
@@ -49,11 +36,7 @@ var ImagePlayer = function(args) {
   /* img element: */
   this._img              = null;
   /* img style: */
-  this._imgwidth         = null;
-  this._imgheight        = null;
-  this._imgobjectfit     = null;
-  this._imgpaddingtop    = null;
-  this._imgpaddingbottom = null;
+  this._imgstyle         = {};
   /* array of images to play: */
   this.images            = images;
   /* number of images: */
@@ -295,29 +278,17 @@ var ImagePlayer = function(args) {
   this._toggleFullScreen = function(obj) {
     /* if fullscreen: */
     if (obj._fullscreen) {
-      /* reset style: */
-      obj.element.style.position        = obj._position;
-      obj.element.style.width           = obj._width;
-      obj.element.style.height          = obj._height;
-      obj.element.style.waxWidth        = obj._maxwidth;
-      obj.element.style.waxHeight       = obj._maxheight;
-      obj.element.style.zIndex          = obj._zIndex;
-      obj.element.style.top             = obj._top;
-      obj.element.style.left            = obj._left;
-      obj.element.style.backgroundColor = obj._backgroundcolor;
-      obj.element.style.border          = obj._border;
-      obj.element.style.margin          = obj._margin;
-      obj.element.style.padding         = obj._padding;
-      obj.element.style.paddingTop      = obj._paddingtop;
-      obj.element.style.paddingBottom   = obj._paddingbottom;
-      obj.element.style.paddingLeft     = obj._paddingleft;
-      obj.element.style.paddingRight    = obj._paddingright;
-      obj._img.style.maxHeight          = 'calc(100% - ' + obj._controlsheight + 'px)';
-      obj._img.style.height             = obj._imgwidth;
-      obj._img.style.width              = obj._imgheight;
-      obj._img.style.objectFit          = obj._imgobjectfit;
-      obj._img.style.paddingTop         = obj._imgpaddingtop;
-      obj._img.style.paddingBottom      = obj._imgpaddingbottom;
+      /* reset element style: */
+      obj.element.removeAttribute('style');
+      for (var k in  obj._style) {
+        obj.element.style[k] = obj._style[k];
+      }
+      /* reset image style: */
+      obj._img.removeAttribute('style');
+      for (var k in obj._imgstyle) {
+        obj._img.style[k] = obj._imgstyle[k];
+      }
+      /* alignment: */
       if (obj._align == 'left') {
         obj._img.style.margin      = '';
         obj._img.style.marginRight = 'auto';
@@ -326,14 +297,17 @@ var ImagePlayer = function(args) {
           obj._controls.style.marginRight = 'auto';
         }
       } else if (obj._align == 'right') {
-        obj._img.style.margin      = '';
+        obj._img.style.margin     = '';
         obj._img.style.marginLeft = 'auto';
         if (obj.controls == 1) {
           obj._controls.style.margin     = '';
           obj._controls.style.marginLeft = 'auto';
         }
       }
-      obj._fullscreen                   = false;
+      /* set controls width: */
+      obj.setControlsWidth();
+      /* fullscreen off: */
+      obj._fullscreen = false;
       obj.toggleFullScreenClose();
     } else {
       /* go full screen: */
@@ -353,17 +327,25 @@ var ImagePlayer = function(args) {
       obj.element.style.paddingBottom   = '0px';
       obj.element.style.paddingLeft     = '0px';
       obj.element.style.paddingRight    = '0px';
+      obj.element.style.alignItems      = 'center';
+      obj.element.style.justifyContent  = 'center';
       obj._img.style.paddingTop         = '10px';
       obj._img.style.paddingBottom      = '10px';
-      obj._img.style.maxHeight          = 'calc(90% - ' + obj._controlsheight + 'px - ' + obj._img.style.paddingTop + ' - ' + obj._img.style.paddingBottom + ')';
-      obj._img.style.height             = '90%';
-      obj._img.style.width              = '90%';
+      obj._img.style.maxHeight          = 'calc(95% - ' + obj._controlsheight + 'px - ' + obj._img.style.paddingTop + ' - ' + obj._img.style.paddingBottom + ')';
       obj._img.style.objectFit          = 'contain';
       obj._img.style.margin             = 'auto';
+      if (obj._img.height > obj._img.width) {
+        obj._img.style.width  = '90%';
+        obj._img.style.height = 'auto';
+      } else {
+        obj._img.style.height = '90%';
+        obj._img.style.width  = 'auto';
+      }
       if (obj.controls == 1) {
         obj._controls.style.margin = 'auto';
       }
-      obj._fullscreen                   = true;
+      /* fullscreen on: */
+      obj._fullscreen = true;
       obj.toggleFullScreenClose();
     }
   }
@@ -504,9 +486,11 @@ var ImagePlayer = function(args) {
         obj.fetchImages([obj.prev, obj.next]);
       }
       /* save img style: */
-      obj._imgwidth     = obj._img.style.width;
-      obj._imgheight    = obj._img.style.height;
-      obj._imgobjectfit = obj._img.style.objectFit;
+      for (var i = 0; i < obj._img.style.length; i ++) {
+        var k = obj._img.style[i];
+        obj._imgstyle[k] = obj._img.style[k];
+      }
+
       /* set width and height: */
       obj._width               = obj._width + 'px';
       obj._height              = obj._height + 'px';
@@ -518,6 +502,11 @@ var ImagePlayer = function(args) {
         obj.setControlsWidth();
         /* add resize listener: */
         window.addEventListener('resize', obj.setControlsWidth);
+      }
+      /* save element style: */
+      for (var i = 0; i < obj.element.style.length; i++) {
+        var k = obj.element.style[i];
+        obj._style[k] = obj.element.style[k];
       }
       /* clear onload: */
       obj._img.onload = null;
