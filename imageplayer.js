@@ -332,15 +332,10 @@ var ImagePlayer = function(args) {
       obj._img.style.paddingTop         = '10px';
       obj._img.style.paddingBottom      = '10px';
       obj._img.style.maxHeight          = 'calc(95% - ' + obj._controlsheight + 'px - ' + obj._img.style.paddingTop + ' - ' + obj._img.style.paddingBottom + ')';
-      obj._img.style.objectFit          = 'contain';
+      obj._img.style.height             = '90%';
+      obj._img.style.width              = 'auto';
       obj._img.style.margin             = 'auto';
-      if (obj._img.height > obj._img.width) {
-        obj._img.style.width  = '90%';
-        obj._img.style.height = 'auto';
-      } else {
-        obj._img.style.height = '90%';
-        obj._img.style.width  = 'auto';
-      }
+      obj._img.style.objectFit          = 'contain';
       if (obj.controls == 1) {
         obj._controls.style.margin = 'auto';
       }
