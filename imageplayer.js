@@ -51,8 +51,8 @@ var ImagePlayer = function(args) {
   this.next              = null;
   /* interval between images: */
   this.interval          = interval;
-  /* used to store js interval details: */
-  this._interval         = null;
+  /* js timeout: */
+  this._timeout          = null;
   /* auto play on or off: */
   this.autoplay          = autoplay;
   /* controls on / off: */
@@ -109,13 +109,13 @@ var ImagePlayer = function(args) {
     /* pre-fetch new next and previous image: */
     for (var i = 0; i < imgs.length; i++) {
       /* if not previously fetched: */
-      if (obj._fetched.indexOf(i) == -1) {
+      if (obj._fetched.indexOf(imgs[i]) == -1) {
         /* use XMLHttpRequest to grab images: */
         var _xhr = new XMLHttpRequest();
         _xhr.open('GET', obj.images[i], true);
         _xhr.send(null);
         /* add to list of fetched images: */
-        obj._fetched.push(i)
+        obj._fetched.push(imgs[i])
       }
     }
   }
@@ -127,6 +127,17 @@ var ImagePlayer = function(args) {
   this._setImage = function(obj) {
     /* set the image: */
     obj._img.src = obj.images[obj.index];
+    /* only if object state is 'playing': */
+    if (obj.state == 'playing') {
+      /* on image load: */
+      obj._img.onload = function() {
+        /* use setTimeout to move to next image: */
+        obj._timeout = setTimeout(obj.nextImage, obj.interval);
+      };
+    } else { 
+      /* clear on image load: */
+      obj._img.onload = null;
+    };
   }
   this.setImage = function() {
     _self._setImage(_self);
@@ -180,12 +191,14 @@ var ImagePlayer = function(args) {
     _self._lastImage(_self);
   }
 
-  /* 'play' using setInterval(): */
+  /* 'play' function, moves to next image, then updates controls: */
   this._play = function(obj) {
     /* if not already playing: */
     if (obj.state != 'playing') {
-      /* setInterval()!: */
-      obj._interval = setInterval(obj.nextImage, obj.interval);
+      /* update state: */
+      obj.state = 'playing';
+      /* move on to next image: */
+      obj.nextImage();
       /* if controls are requested: */
       if (obj.controls == 1) {
         /* update icon: */
@@ -199,20 +212,20 @@ var ImagePlayer = function(args) {
         obj._controlsnext.style.visibility  = 'hidden';
         obj._controlslast.style.visibility  = 'hidden';
       }
-      /* update state: */
-      obj.state = 'playing';
     }
   }
   this.play = function() {
     _self._play(_self);
   }
 
-  /* stop by clearing interval: */
+  /* stop by changing object state: */
   this._stop = function(obj) {
     /* if not already stopped: */
     if (obj.state != 'stopped') {
-      /* clearInterval()!: */
-      clearInterval(obj._interval);
+      /* clear object timeout: */
+      clearTimeout(obj._timeout);
+      /* update state: */
+      obj.state = 'stopped';
       /* if controls are requested: */
       if (obj.controls == 1) {
         /* update icon: */
@@ -226,8 +239,6 @@ var ImagePlayer = function(args) {
         obj._controlsnext.style.visibility  = 'visible';
         obj._controlslast.style.visibility  = 'visible';
       }
-      /* update state: */
-      obj.state = 'stopped';
     }
   }
   this.stop = function() {
@@ -472,14 +483,6 @@ var ImagePlayer = function(args) {
         /* add controls: */
         obj.addControls();
       }
-      /* if auto play is set: */
-      if (obj.autoplay == 1) {
-        /* start playing: */
-        obj.play();
-      } else {
-        /* pre-fetch previous and next images: */
-        obj.fetchImages([obj.prev, obj.next]);
-      }
       /* save img style: */
       for (var i = 0; i < obj._img.style.length; i ++) {
         var k = obj._img.style[i];
@@ -505,6 +508,14 @@ var ImagePlayer = function(args) {
       }
       /* clear onload: */
       obj._img.onload = null;
+      /* if auto play is set: */
+      if (obj.autoplay == 1) {
+        /* start playing: */
+        obj.play();
+      } else {
+        /* pre-fetch previous and next images: */
+        obj.fetchImages([obj.prev, obj.next]);
+      }
     }
   }
   this.initPlayer = function() {
