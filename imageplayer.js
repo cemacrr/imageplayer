@@ -14,6 +14,7 @@ var ImagePlayer = function(args) {
   var closebgcolor = (typeof args.closebgcolor === 'undefined') ? 'rgba(56, 56, 56, 0.5)' : args.closebgcolor;
   var closecolor   = (typeof args.closecolor === 'undefined') ? '#ffffff' : args.closecolor;
   var icondir      = (typeof args.icondir === 'undefined') ? 'images' : args.icondir;
+  var startindex   = (typeof args.startindex === 'undefined') ? 0 : args.startindex;
 
   /* get reference to self: */
   var _self = this;
@@ -82,6 +83,14 @@ var ImagePlayer = function(args) {
   this._iconnext         = this.icondir + '/' + 'next.png';
   /* state defaults to stopped: */
   this.state             = 'stopped';
+  /* starting index: */
+  if (startindex < 0) {
+    startindex = this.length + startindex;
+  }
+  if (startindex > (this.length - 1)) {
+    startindex = 0;
+  }
+  this.startindex = startindex; 
 
   /* functon to set indexes: */
   this._setIndexes = function(obj, i) {
@@ -131,13 +140,24 @@ var ImagePlayer = function(args) {
     if (obj.state == 'playing') {
       /* on image load: */
       obj._img.onload = function() {
+        /* if controls are requested: */
+        if (obj.controls == 1) {
+          /* set controls width: */
+          obj.setControlsWidth();
+        }
         /* use setTimeout to move to next image: */
         obj._timeout = setTimeout(obj.nextImage, obj.interval);
-      };
+      }
     } else { 
-      /* clear on image load: */
-      obj._img.onload = null;
-    };
+      /* clear timeout from image load: */
+      obj._img.onload = function() {
+        /* if controls are requested: */
+        if (obj.controls == 1) {
+          /* set controls width: */
+          obj.setControlsWidth();
+        }
+      }
+    }
   }
   this.setImage = function() {
     _self._setImage(_self);
@@ -264,6 +284,8 @@ var ImagePlayer = function(args) {
       obj._fsclose.style.textDecoration  = 'none';
       obj._fsclose.style.cursor          = 'pointer';
       obj._fsclose.style.display         = 'none';
+      obj._fsclose.style.width           = 'calc(1em + 10px)';
+      obj._fsclose.style.height          = 'calc(1em + 10px)';
       /* add listener: */
       obj._fsclose.addEventListener('click', obj.toggleFullScreen);
       /* add mouseover listeners for hovering: */
@@ -276,7 +298,7 @@ var ImagePlayer = function(args) {
     }
     /* if fullscreen: */
     if (obj._fullscreen) {
-      obj._fsclose.style.display = 'block';
+      obj._fsclose.style.display = 'inline-block';
     } else {
       obj._fsclose.style.display = 'none';
     }
@@ -344,7 +366,7 @@ var ImagePlayer = function(args) {
       obj._img.style.paddingBottom      = '10px';
       obj._img.style.maxHeight          = 'calc(95% - ' + obj._controlsheight + 'px - ' + obj._img.style.paddingTop + ' - ' + obj._img.style.paddingBottom + ')';
       obj._img.style.height             = '90%';
-      obj._img.style.width              = 'auto';
+      obj._img.style.maxWidth           = '90%';
       obj._img.style.margin             = 'auto';
       obj._img.style.objectFit          = 'contain';
       if (obj.controls == 1) {
@@ -452,7 +474,7 @@ var ImagePlayer = function(args) {
       obj._img.style.margin = 'auto';
     }
     /* set indexes: */
-    obj.setIndexes(0);
+    obj.setIndexes(obj.startindex);
     /* set image: */
     obj.setImage();
     /* on image load .... : */
@@ -488,7 +510,6 @@ var ImagePlayer = function(args) {
         var k = obj._img.style[i];
         obj._imgstyle[k] = obj._img.style[k];
       }
-
       /* set width and height: */
       obj._width               = obj._width + 'px';
       obj._height              = obj._height + 'px';

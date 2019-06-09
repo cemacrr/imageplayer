@@ -75,6 +75,7 @@ Optional options:
   * `closebgcolor`: Background colour for full screen close icon. Default: `rgba(56, 56, 56, 0.5)`.
   * `closecolor`: Foreground colour for full screen close icon. Default: `#ffffff`
   * `icondir`: Path to directory containing control icon images (`play.png`, etc.). Default: `images`.
+  * `startindex`: Image index from which the player should start. Default `0`.
 
 ### Example
 
