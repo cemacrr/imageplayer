@@ -668,13 +668,17 @@ var ImagePlayer = function(args) {
         /* add resize listener: */
         window.addEventListener('resize',
                                 function() {
-                                  obj.checkImageDimensions();
-                                  obj.setControlsWidth();
-                                 /* clear hard width and height values: */
-                                 obj.element.style.width = null;
-                                 obj.element.style.height = null;
-                                 obj._img.style.width = null;
-                                 obj._img.style.height = null;
+                                  if (obj._fullscreen) {
+                                    obj.setControlsWidth();
+                                  } else { 
+                                    obj.checkImageDimensions();
+                                    obj.setControlsWidth();
+                                    /* clear hard width and height values: */
+                                    obj.element.style.width = null;
+                                    obj.element.style.height = null;
+                                    obj._img.style.width = null;
+                                    obj._img.style.height = null;
+                                  }
                                 });
       }
       /* save element style: */
