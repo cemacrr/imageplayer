@@ -436,7 +436,11 @@ var ImagePlayer = function(args) {
       /* reset controls: */
       if (obj.controls == 1) {
         obj._controls.style.backgroundColor = obj.bgcolor;
-        obj._controlsplay.src = obj._icons['play'];
+        if (obj.state == 'playing') {
+          obj._controlsplay.src = obj._icons['pause'];
+        } else {
+          obj._controlsplay.src = obj._icons['play'];
+        }
         obj._controlsfull.src = obj._icons['full'];
         obj._controlsfirst.src = obj._icons['first'];
         obj._controlslast.src = obj._icons['last'];
@@ -486,7 +490,11 @@ var ImagePlayer = function(args) {
       if (obj.controls == 1) {
         obj._controls.style.margin = 'auto';
         obj._controls.style.backgroundColor = obj.fsbgcolor;
-        obj._controlsplay.src = obj._icons['fsplay'];
+        if (obj.state == 'playing') {
+          obj._controlsplay.src = obj._icons['fspause'];
+        } else {
+          obj._controlsplay.src = obj._icons['fsplay'];
+        }
         obj._controlsfull.src = obj._icons['fsfull'];
         obj._controlsfirst.src = obj._icons['fsfirst'];
         obj._controlslast.src = obj._icons['fslast'];
@@ -517,18 +525,34 @@ var ImagePlayer = function(args) {
     /* add listeners: */
     element.addEventListener('mouseover',
                              function() {
-                               if (obj._fullscreen) {
-                                 element.src = obj._icons['fs' + icon + 'hover'];
+                               if ((icon == 'play') && (obj.state == 'playing')) {
+                                 if (obj._fullscreen) {
+                                   element.src = obj._icons['fs' + 'pause' + 'hover'];
+                                 } else {
+                                   element.src = obj._icons['pause' + 'hover'];
+                                 }
                                } else {
-                                 element.src = obj._icons[icon + 'hover'];
+                                 if (obj._fullscreen) {
+                                   element.src = obj._icons['fs' + icon + 'hover'];
+                                 } else {
+                                   element.src = obj._icons[icon + 'hover'];
+                                 }
                                }
                              });
     element.addEventListener('mouseout',
                              function() {
-                               if (obj._fullscreen) {
-                                 element.src = obj._icons['fs' + icon];
+                               if ((icon == 'play') && (obj.state == 'playing')) {
+                                 if (obj._fullscreen) {
+                                   element.src = obj._icons['fs' + 'pause'];
+                                 } else {
+                                   element.src = obj._icons['pause'];
+                                 }
                                } else {
-                                 element.src = obj._icons[icon];
+                                 if (obj._fullscreen) {
+                                   element.src = obj._icons['fs' + icon];
+                                 } else {
+                                   element.src = obj._icons[icon];
+                                 }
                                }
                              });
     element.addEventListener('click', func);
