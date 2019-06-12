@@ -71,7 +71,8 @@ Optional options:
   * `interval`: The interval in milliseconds between updating images. Default: `300`.
   * `autoplay`: Whether to start playing automatically. Set to `1` for true, `0` for false. Default: `1`.
   * `controls`: Whether controls should be displayed. Set to `1` for true, `0` for false. Default: `1`.
-  * `bgcolor`: Background colour to use for full screen mode and controls. Default: `#383838`.
+  * `bgcolor`: Background colour to use for player in non full screen mode. Default: `#ffffff`.
+  * `fsbgcolor`: Background colour to use for player in full screen mode. Default: `#383838`.
   * `closebgcolor`: Background colour for full screen close icon. Default: `rgba(56, 56, 56, 0.5)`.
   * `closecolor`: Foreground colour for full screen close icon. Default: `#ffffff`
   * `icondir`: Path to directory containing control icon images (`play.png`, etc.). Default: `images`.
